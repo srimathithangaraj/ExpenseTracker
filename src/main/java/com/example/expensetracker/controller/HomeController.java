@@ -1,36 +1,45 @@
 package com.example.expensetracker.controller;
 
-import com.example.expensetracker.mapper.DbMapperRegister;
+import com.example.expensetracker.mapper.UserMapper;
+import com.example.expensetracker.model.Budget;
 import com.example.expensetracker.model.User;
+import com.example.expensetracker.service.BudgetService;
 import com.example.expensetracker.service.CheckUser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 
 @Controller
 public class HomeController {
-    @Autowired
-    DbMapperRegister mapper;
-    @Autowired
-    CheckUser checkuser;
 
-    @RequestMapping("userregistration")
+    UserMapper mapper;
+    CheckUser checkuser;
+    BudgetService budgetService;
+
+    public HomeController(UserMapper mapper, CheckUser checkuser, BudgetService budgetService) {
+        this.mapper = mapper;
+        this.checkuser = checkuser;
+        this.budgetService = budgetService;
+    }
+
+    @RequestMapping("/")
     public String register() {
         return "userregister";
     }
 
     @RequestMapping("register")
     public ModelAndView register(User user) {
-        ModelAndView mv = new ModelAndView("login");
+        ModelAndView mv = new ModelAndView("userregister");
         mv.addObject("user", user);
         if (checkuser.checkUserEntry(user.getUsername(), user.getEmail()) == true) {
             mv.setViewName("userregister");
         } else {
             mapper.insertUser(user);
+            Budget initialBudget=new Budget(0,"");
+            budgetService.insertBudget(initialBudget, user.getUsername());
+
             mv.setViewName("redirect:/login");
         }
 
@@ -38,14 +47,15 @@ public class HomeController {
     }
 
     @RequestMapping("login")
-    public String userlogin() {
+    public String home(HttpSession session, HttpServletRequest request) {
+        String username = (String) request.getParameter("username");
+        String password = (String) request.getParameter("password");
+        if (username != null && password != null && checkuser.checkUsernameAndPassword(username, password)) {
+            session.setAttribute("username", username);
+            return "redirect:/home";
+        }
         return "userlogin";
     }
 
-    @RequestMapping("home")
-    public String home(@RequestParam("username") String username, @RequestParam("password") String password) {
-        if (checkuser.checkUsernameAndPassword(username, password))
-            return "homepage";
-        return "redirect:/login";
-    }
+
 }

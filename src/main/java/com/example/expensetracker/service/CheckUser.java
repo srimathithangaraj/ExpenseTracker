@@ -1,6 +1,6 @@
 package com.example.expensetracker.service;
 
-import com.example.expensetracker.mapper.DbMapperRegister;
+import com.example.expensetracker.mapper.UserMapper;
 import com.example.expensetracker.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class CheckUser {
     @Autowired
-    DbMapperRegister mapper;
+    UserMapper mapper;
 
     public Boolean checkUserEntry(String uname, String email) {
         List<User> unamedata = mapper.checkUsername(uname);

@@ -79,7 +79,7 @@
     </style>
 </head>
 <body>
-    <form action="home" method="post">
+    <form action="login" method="post">
         <h2>Login</h2>
         <div>
             <label for="username">Username:</label>
@@ -92,7 +92,7 @@
         <button type="submit">Login</button>
     </form>
     <div class="register-link">
-        New user? <a href="userregistration">Register here</a>
+        New user? <a href="/">Register here</a>
     </div>
 </body>
 </html>

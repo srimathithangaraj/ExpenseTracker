@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
-public interface DbMapperRegister {
+public interface UserMapper {
     @Insert("insert into ExpenseTrackerUser values(#{username},#{fullName},#{email},#{password})")
     Boolean insertUser(User user);
 
