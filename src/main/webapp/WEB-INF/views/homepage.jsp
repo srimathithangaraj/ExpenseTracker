@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%@ page import="com.example.expensetracker.model.Credit"%>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Budget Planning App</title>
 <style>
@@ -54,9 +57,12 @@
     .transaction-history th {
         background-color: #f2f2f2;
     }
+    .edit-delete-buttons {
+        display: flex;
+        justify-content: space-between;
+    }
 </style>
 </head>
-<body>
 <body>
 <div class="header">
     <h2>Budget Planning App</h2>
@@ -64,9 +70,8 @@
         <span>Username: ${username}</span>
         <a href="/logout">Logout</a>
     </div>
-    <p>Balance: $X | Budget: ${budget} | Expense: $XXXX</p>
+    <p>Balance: ${credit} | Budget: ${budget} | Expense: $XXXX</p>
 </div>
-
 <div class="transaction-options">
     <form action="budget" method="post">
         <button type="submit" name="submitAction" value="budget">Budget</button>
@@ -79,33 +84,38 @@
     </form>
 </div>
 
-<table class="transaction-history">
-    <thead>
+<h2>Credit Details</h2>
+<table border="1" class="transaction-history">
+    <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    <c:forEach items="${creditList}" var="credit1">
         <tr>
-            <th>Type</th>
-            <th>Date</th>
-            <th>Title</th>
-            <th>Amount</th>
-            <th>Edit</th>
+            <td>${credit1.getCredit_date()}</td>
+            <td>${credit1.credit_amount}</td>
+            <td>${credit1.credit_title}</td>
+            <td>${credit1.credit_description}</td>
+            <td class="edit-delete-buttons">
+                <form action="editCredit" method="post">
+                                          <!-- Pass the credit detail's date and title as parameters -->
+                                          <input type="hidden" name="credit_date" value="${credit1.getCredit_date()}">
+                                          <input type="hidden" name="credit_amount" value="${credit1.getCredit_amount()}">
+                                          <button type="submit" name="submitAction" value="edit">Edit</button>
+                              </form>
+                <form action="deleteCredit" method="post">
+                            <!-- Pass the credit detail's date and title as parameters -->
+                            <input type="hidden" name="credit_date" value="${credit1.getCredit_date()}">
+                            <input type="hidden" name="credit_amount" value="${credit1.getCredit_amount()}">
+                            <button type="submit" name="submitAction" value="delete">Delete</button>
+                </form>
+
+            </td>
         </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Credit</td>
-            <td>2024-04-30</td>
-            <td>Salary</td>
-            <td>$2500.00</td>
-            <td>Edit</td>
-        </tr>
-        <tr>
-            <td>Credit</td>
-            <td>2024-04-29</td>
-            <td>Bonus</td>
-            <td>$1000.00</td>
-            <td>Edit</td>
-        </tr>
-        <tr>
-            <td>Debit</td>
-            <td>2024-04-30</td>
-            <td>Grocery</td>
-            <td>-$50.00</td>
+    </c:forEach>
+</table>
+</body>
+</html>

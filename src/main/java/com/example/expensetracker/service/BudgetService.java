@@ -15,6 +15,9 @@ public class BudgetService {
     public void insertBudget(Budget budget, String username) {
         budgetMapper.insertBudget(budget, username);
     }
+    public void updateBudget(Budget budget, String username) {
+        budgetMapper.updateBudget(budget, username);
+    }
     public float fetchBudget(String username){
        return budgetMapper.getamount(username);
     }

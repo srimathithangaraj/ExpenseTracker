@@ -3,8 +3,17 @@ import java.time.LocalDate;
 public class Credit {
     private LocalDate credit_date;
     private String credit_title;
-    private double credit_amount;
+    private float credit_amount;
     private String credit_description;
+
+    public Credit(LocalDate credit_date, float credit_amount, String credit_title, String credit_description) {
+        this.credit_date = credit_date;
+        this.credit_title = credit_title;
+        this.credit_amount = credit_amount;
+        this.credit_description = credit_description;
+    }
+
+
     public LocalDate getCredit_date() {
         return credit_date;
     }
@@ -21,11 +30,11 @@ public class Credit {
         this.credit_title = credit_title;
     }
 
-    public double getCredit_amount() {
+    public float getCredit_amount() {
         return credit_amount;
     }
 
-    public void setCredit_amount(double credit_amount) {
+    public void setCredit_amount(float credit_amount) {
         this.credit_amount = credit_amount;
     }
 
